@@ -14,7 +14,7 @@
        <p>新規作成</p>
      </a>
   </div>
-  <div> 
+  <div>
     <table>
       <tr>
         <th>ID</th>
