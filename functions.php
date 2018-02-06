@@ -1,36 +1,44 @@
 <?php
     require('connection.php');
 
+    // 新規作成
     function create($data) {
       insertDb($data['todo']);
     }
 
     // 全件取得
-    function index() {
+    function index(){
         return $todos = selectAll();
     }
 
     // 更新
-    function update($data) {
+    function update($data){
         updateDb($data['id'], $data['todo']);
     }
 
     // 詳細の取得
-    function detail($id) {
+    function detail($id){
         return getSelectData($id);
     }
 
-    function checkReferer() {
+    function checkReferer(){
         $httpArr = parse_url($_SERVER['HTTP_REFERER']);
         return $res = transition($httpArr['path']);
     }
 
-    function transition($path) {
+    function transition($path){
         $data = $_POST;
-        if($path === '/new.php'){
+        if($path === '/index.php' && $data['type'] === 'delete'){
+            deleteData($data['id']);
+            return 'index';
+        } elseif($path === '/new.php'){
             create($data);
         } elseif($path === '/edit.php'){
             update($data);
         }
+    }
+
+    function deleteData($id){
+      deleteDb($id);
     }
 ?>
