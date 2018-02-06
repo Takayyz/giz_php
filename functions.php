@@ -18,7 +18,7 @@
         $_SESSION['token'] = $token;
     }
 
-    function checkToken(){
+    function checkToken($data){
         if(empty($_SESSION['token']) || ($_SESSION['token'] != $data)){
             $_SESSION['err'] = "不正な操作です";
             header('location: ' .$_SERVER['HTTP_REFERER']. '');
@@ -61,14 +61,22 @@
     }
 
     function transition($path){
+        unsetSession();
         $data = $_POST;
+        if(isset($data['todo'])) $res = validate($data['todo']);
         if($path === '/index.php' && $data['type'] === 'delete'){
             deleteData($data['id']);
             return 'index';
+        } elseif(!$res || !empty($_SESSION['err'])){
+            return 'back';
         } elseif($path === '/new.php'){
             create($data);
         } elseif($path === '/edit.php'){
             update($data);
         }
+    }
+
+    function validate($data){
+        return $res = $data != "" ? true : $_SESSION['err'] ='入力がありません';
     }
 ?>

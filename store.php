@@ -1,10 +1,12 @@
 <?php
     require('functions.php');
     $res = checkReferer();
-    if($res == 'index'){
-      header('location: ./index.php');
+    if($res != 'back'){
+        header('location: ./index.php');
+    } elseif($res == 'index'){
+        header('location: ./index.php');
     } else{
-      header('location: ' .$_SERVER['HTTP_REFERER']. '');
+        header('location: ' .$_SERVER['HTTP_REFERER']. '');
     }
     // var_dump($_POST);
 ?>
