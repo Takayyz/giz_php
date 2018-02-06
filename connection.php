@@ -12,15 +12,6 @@
         }
     }
 
-    // 作成処理
-    function insertDb($data) {
-        $dbh = connectPdo();
-        $sql = 'INSERT INTO todos (todo) VALUES (:todo)';
-        $stmt = $dbh->prepare($sql);
-        $stmt->bindParam(':todo', $data, PDO::PARAM_STR);
-        $stmt->execute();
-    }
-
     // データ全件取得
     function selectAll() {
         $dbh = connectPdo();
@@ -30,5 +21,34 @@
             array_push($todo, $row);
         }
         return $todo;
+    }
+
+    // 詳細取得
+    function getSelectData($id) {
+        $dbh = connectPdo();
+        $sql = 'SELECT todo FROM todos WHERE id = :id AND deleted_at IS NULL';
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute(array(':id' => (int)$id));
+        $data = $stmt->fetch();
+        return $data['todo'];
+    }
+
+    // 作成処理
+    function insertDb($data) {
+        $dbh = connectPdo();
+        $sql = 'INSERT INTO todos (todo) VALUES (:todo)';
+        $stmt = $dbh->prepare($sql);
+        $stmt->bindParam(':todo', $data, PDO::PARAM_STR);
+        $stmt->execute();
+    }
+
+    // 更新処理
+    function updateDb($id, $data) {
+        $dbh = connectPdo();
+        $sql = 'UPDATE todos SET todo = :todo WHERE id = :id';
+        $stmt = $dbh->prepare($sql);
+        $stmt->bindParam(':todo', $data, PDO::PARAM_STR);
+        $stmt->bindValue(':id', (int)$id, PDO::PARAM_INT);
+        $stmt->execute();
     }
 ?>
